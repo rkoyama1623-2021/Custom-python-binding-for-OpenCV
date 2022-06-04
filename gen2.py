@@ -51,6 +51,8 @@ if sys.version_info[0] >= 3:
 else:
     from cStringIO import StringIO
 
+root_ns = 'sandbox'
+
 ignored_arg_types = ["RNG*"]
 
 gen_template_check_self = Template("""    if(!PyObject_TypeCheck(self, &pyopencv_${name}_Type))
@@ -890,9 +892,9 @@ class PythonWrapperGenerator(object):
     def gen_namespaces_reg(self):
         self.code_ns_reg.write('static void init_submodules(PyObject * root) \n{\n')
         for ns_name in sorted(self.namespaces):
-            if ns_name.split('.')[0] == 'cv':
+            if ns_name.split('.')[0] == root_ns:
                 wname = normalize_class_name(ns_name)
-                self.code_ns_reg.write('  init_submodule(root, MODULESTR"%s", methods_%s, consts_%s);\n' % (ns_name[2:], wname, wname))
+                self.code_ns_reg.write('  init_submodule(root, MODULESTR"%s", methods_%s, consts_%s);\n' % (ns_name[len(root_ns):], wname, wname))
         self.code_ns_reg.write('};\n')
 
 
@@ -910,7 +912,13 @@ class PythonWrapperGenerator(object):
             decls = self.parser.parse(hdr)
             if len(decls) == 0:
                 continue
-            self.code_include.write( '#include "{0}"\n'.format(hdr[hdr.rindex('opencv2/'):]) )
+            # self.code_include.write( '#include "{0}"\n'.format(hdr[hdr.rindex('opencv2/'):]) )
+            if hdr.find('misc/python/shadow_') < 0:  # Avoid including the "shadow_" files
+                if hdr.find('opencv2/') >= 0:
+                    # put relative path
+                    self.code_include.write('#include "{0}"\n'.format(hdr[hdr.rindex('opencv2/'):]))
+                else:
+                    self.code_include.write('#include "{0}"\n'.format(hdr))
             for decl in decls:
                 name = decl[0]
                 if name.startswith("struct") or name.startswith("class"):
@@ -969,7 +977,7 @@ class PythonWrapperGenerator(object):
 
         # step 3: generate the code for all the global functions
         for ns_name, ns in sorted(self.namespaces.items()):
-            if ns_name.split('.')[0] != 'cv':
+            if ns_name.split('.')[0] != root_ns:
                 continue
             for name, func in sorted(ns.funcs.items()):
                 code = func.gen_code(self.classes)
@@ -995,7 +1003,9 @@ if __name__ == "__main__":
     dstdir = "/Users/vp/tmp"
     if len(sys.argv) > 1:
         dstdir = sys.argv[1]
-    if len(sys.argv) > 2:
-        srcfiles = open(sys.argv[2], 'r').read().split(';')
+    # if len(sys.argv) > 2:
+    #     srcfiles = open(sys.argv[2], 'r').read().split(';')
+    with open(sys.argv[2], 'r') as f:
+        srcfiles = [l.strip() for l in f.readlines()]
     generator = PythonWrapperGenerator()
     generator.gen(srcfiles, dstdir)

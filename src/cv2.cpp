@@ -49,7 +49,7 @@
 
 #include <Python.h>
 
-#define MODULESTR "cv2"
+#define MODULESTR "sandbox"
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <numpy/ndarrayobject.h>
 
@@ -1477,7 +1477,7 @@ static int to_ok(PyTypeObject *to)
 
 
 #if PY_MAJOR_VERSION >= 3
-extern "C" CV_EXPORTS PyObject* PyInit_cv2();
+extern "C" CV_EXPORTS PyObject* PyInit_sandbox();
 static struct PyModuleDef cv2_moduledef =
 {
     PyModuleDef_HEAD_INIT,
@@ -1488,11 +1488,11 @@ static struct PyModuleDef cv2_moduledef =
     special_methods
 };
 
-PyObject* PyInit_cv2()
+PyObject* PyInit_sandbox()
 #else
-extern "C" CV_EXPORTS void initcv2();
+extern "C" CV_EXPORTS void initsandbox();
 
-void initcv2()
+void initsandbox()
 #endif
 {
   import_array();
