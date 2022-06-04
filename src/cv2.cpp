@@ -14,6 +14,7 @@
  * Copyright (C) 2010-2013, Advanced Micro Devices, Inc., all rights reserved.
  * Copyright (C) 2015-2016, OpenCV Foundation, all rights reserved.
  * Copyright (C) 2015-2016, Itseez Inc., all rights reserved.
+ * Copyright (C) 2022     , Ryo Koyama, all rights reserved.
  * Third party copyrights are property of their respective owners.
  *
  * Redistribution and use in source and binary forms, with or without modification,
