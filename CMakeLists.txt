@@ -7,11 +7,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 find_package(OpenCV REQUIRED)
 
-# find_package(PythonLibs REQUIRED)
-# in the case of homebrew python
-#set(PYTHON_INCLUDE_DIRS "/usr/local/Cellar/python/2.7.12_2/Frameworks/Python.framework/Versions/2.7/include/python2.7/")
-#set(PYTHON_LIBRARIES "/usr/local/Cellar/python/2.7.12_2/Frameworks/Python.framework/Versions/2.7/lib/libpython2.7.dylib")
-
 find_package(PythonInterp REQUIRED)
 find_package(PythonLibs 2 REQUIRED)
 include_directories(
