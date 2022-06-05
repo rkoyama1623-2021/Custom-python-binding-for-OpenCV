@@ -24,8 +24,8 @@ set(cv2_generated_hdrs
 
 add_custom_command(
   OUTPUT ${cv2_generated_hdrs}
-  COMMAND python "${CMAKE_SOURCE_DIR}/gen2.py" ${CMAKE_CURRENT_BINARY_DIR} "${CMAKE_SOURCE_DIR}/src/headers.txt"
-  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/src"
+  COMMAND python "${CMAKE_CURRENT_SOURCE_DIR}/gen2.py" ${CMAKE_CURRENT_BINARY_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/src/headers.txt"
+  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src"
   DEPENDS ${opencv_hdrs}
 )
 
@@ -34,7 +34,7 @@ add_library(sandbox SHARED
   "src/cv2.cpp"
   ${cv2_generated_hdrs}
 )
-target_include_directories(sandbox PUBLIC ${CMAKE_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(sandbox PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(sandbox
   ${PYTHON_LIBRARIES}
   ${OpenCV_LIBS}
